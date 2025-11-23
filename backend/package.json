@@ -1,0 +1,38 @@
+{
+	"name": "dicri_backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "jest --runInBand",
+		"start": "ts-node src/app.ts",
+		"build": "tsc",
+		"start:prod": "node dist/app.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"body-parser": "^2.2.0",
+		"cors": "^2.8.5",
+		"dotenv": "^17.2.3",
+		"express": "^5.1.0",
+		"jsonwebtoken": "^9.0.2",
+		"morgan": "^1.10.1",
+		"mssql": "^12.1.0"
+	},
+	"devDependencies": {
+		"@types/cors": "^2.8.19",
+		"@types/express": "^5.0.5",
+		"@types/jest": "^30.0.0",
+		"@types/jsonwebtoken": "^9.0.10",
+		"@types/mocha": "^10.0.10",
+		"@types/morgan": "^1.9.10",
+		"@types/mssql": "^9.1.8",
+		"@types/node": "^24.10.1",
+		"jest": "^30.2.0",
+		"nodemon": "^3.1.11",
+		"ts-jest": "^29.4.5",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.9.3"
+	}
+}

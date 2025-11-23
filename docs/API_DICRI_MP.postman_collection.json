@@ -1,0 +1,606 @@
+{
+	"info": {
+		"_postman_id": "e0403829-92d2-4313-88b0-a3c56c647685",
+		"name": "API_DICRI_MP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12015645"
+	},
+	"item": [
+		{
+			"name": "EXPEDIENTES",
+			"item": [
+				{
+					"name": "crear expediente",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"codigo_expediente\": \"EXP-2025-0002\",\r\n  \"descripcion\": \"Descripción de prueba del expediente\",\r\n  \"id_departamento\": 1,\r\n  \"id_municipio\": 1,\r\n  \"fecha_hecho\": \"2025-11-22T10:30:00Z\",\r\n  \"id_usuario_registro\": 1,\r\n  \"id_usuario_actualizacion\": null,\r\n  \"estado_registro\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/expedientes",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"expedientes"
+							]
+						},
+						"description": "Crea un nuevo expediente en el sistema.\n\n**Propósito:**\nEste endpoint permite registrar un expediente con los datos proporcionados.\n\n**Campos requeridos en el cuerpo de la solicitud:**\n- `codigo_expediente` (string): Código único del expediente.\n- `descripcion` (string): Descripción del expediente.\n- `id_departamento` (entero): ID del departamento asociado.\n- `id_municipio` (entero): ID del municipio asociado.\n- `fecha_hecho` (string, ISO 8601): Fecha y hora del hecho.\n- `id_usuario_registro` (entero): ID del usuario que registra el expediente.\n- `estado_registro` (entero): Estado del registro del expediente.\n\n**Campos opcionales:**\n- `id_usuario_actualizacion` (entero o null): ID del usuario que actualizó el expediente por última vez.\n\n**Respuesta exitosa (201):**\nDevuelve un mensaje de confirmación y los datos del expediente creado, incluyendo su ID único y los campos enviados."
+					},
+					"response": []
+				},
+				{
+					"name": "obtener expediente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_local}}/expedientes/2",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"expedientes",
+								"2"
+							]
+						},
+						"description": "Retrieves the details of a specific expediente (case file) by its unique identifier. \n\nParameters:\n- Path: The endpoint expects the expediente ID as part of the URL path (e.g., /expedientes/2). No query or body parameters are required.\n\nResponse:\n- Returns a JSON object containing the expediente's details if found. If the expediente does not exist, a suitable error response is returned."
+					},
+					"response": []
+				},
+				{
+					"name": "obtener expediente por usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_local}}/expedientes/por-usuario/1",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"expedientes",
+								"por-usuario",
+								"1"
+							]
+						},
+						"description": "Retrieves the expediente (record or file) associated with a specific user. \n\n**Purpose:**\nUse this endpoint to obtain detailed information about a user's expediente by providing the user's unique identifier in the URL path.\n\n**Expected Parameters:**\n- `userId` (path parameter): The unique identifier of the user whose expediente is being requested. In this example, the value is '1'.\n\n**Response:**\nReturns the expediente data for the specified user, typically including user details and associated records. The structure of the response depends on the API implementation.\n\n**Usage:**\nCall this endpoint when you need to fetch all expediente information for a particular user by their ID."
+					},
+					"response": []
+				},
+				{
+					"name": "actualizar expediente",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"descripcion\": \"Robo con violencia - actualizado\",\r\n  \"id_usuario_actualizacion\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/expedientes/1",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"expedientes",
+								"1"
+							]
+						},
+						"description": "Updates an existing 'expediente' (case file) by its unique ID.\n\nPurpose:\nThis endpoint allows you to update the details of a specific expediente. It is typically used to modify the description or update metadata related to the case file.\n\nRequest Body Parameters:\n- descripcion (string): The new or updated description for the expediente.\n- id_usuario_actualizacion (integer): The ID of the user performing the update.\n\nSuccessful Response:\nA successful response indicates that the expediente was updated. The response usually includes the updated expediente data or a confirmation message."
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar expediente (borrado lógico)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id_usuario_actualizacion\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/expedientes/1",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"expedientes",
+								"1"
+							]
+						},
+						"description": "This DELETE endpoint performs a logical (soft) delete of an expediente by updating its status, rather than removing it from the database. The request body must include 'id_usuario_actualizacion' to track the user performing the operation."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "INDICIOS",
+			"item": [
+				{
+					"name": "crear indicio",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id_expediente\": 1,\r\n  \"numero_indicio\": 1,\r\n  \"descripcion\": \"Fragmento de vidrio encontrado en la escena\",\r\n  \"tipo\": \"Vidrio\",\r\n  \"color\": \"Transparente\",\r\n  \"tamano\": \"Pequeño\",\r\n  \"peso\": \"5g\",\r\n  \"ubicacion\": \"Suelo junto a la ventana norte\",\r\n  \"observacion\": \"Posible evidencia de entrada forzada\",\r\n  \"id_usuario_registro\": 1,\r\n  \"id_usuario_actualizacion\": null,\r\n  \"estado_registro\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/indicios",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"indicios"
+							]
+						},
+						"description": "Creates a new 'indicio' (evidence item) in the system. This endpoint is used to register evidence related to a case. \n\nExpected request body (JSON):\n- id_expediente (integer): ID of the associated case file.\n- numero_indicio (integer): Sequential number of the evidence item.\n- descripcion (string): Detailed description of the evidence.\n- tipo (string): Type of evidence (e.g., 'Vidrio', 'Metal', etc.).\n- color (string): Color of the evidence.\n- tamano (string): Size descriptor (e.g., 'Pequeño', 'Mediano', 'Grande').\n- peso (string): Weight of the evidence (e.g., '5g').\n- ubicacion (string): Location where the evidence was found.\n- observacion (string): Additional notes or observations.\n- id_usuario_registro (integer): ID of the user registering the evidence.\n- id_usuario_actualizacion (integer|null): ID of the user who last updated the record (nullable).\n- estado_registro (integer): Status of the record (e.g., 1 for active).\n\nUsage notes:\n- All required fields must be provided except 'id_usuario_actualizacion', which can be null for new records.\n- Ensure 'id_expediente' and 'id_usuario_registro' reference valid existing records.\n- Use this endpoint to add new evidence items to a case for tracking and documentation purposes."
+					},
+					"response": []
+				},
+				{
+					"name": "obtener indicio",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_local}}/indicios/4",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"indicios",
+								"4"
+							]
+						},
+						"description": "Retrieves detailed information about a specific 'indicio' (evidence item) by its unique ID. \n\n**Endpoint:** `GET {{api_local}}/indicios/:id`\n\n**Path Parameter:**\n- `id` (integer, required): The unique identifier of the indicio to retrieve. Example: `4` in `/indicios/4`.\n\n**Response:**\nReturns a JSON object containing all details of the requested indicio, including fields such as `id_indicio`, `id_expediente`, `numero_indicio`, `descripcion`, `tipo`, `color`, `tamano`, `peso`, `ubicacion`, `observacion`, `id_usuario_registro`, `fecha_registro`, `id_usuario_actualizacion`, `fecha_actualizacion`, `estado_registro`, and `id_tipo_indicio`.\n\nUse this endpoint to fetch all available data for a single indicio by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "actualizar indicio",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"descripcion\": \"Fragmento de vidrio - confirmado por laboratorio\",\r\n  \"ubicacion\": \"Mesa de análisis\",\r\n  \"id_usuario_actualizacion\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/indicios/1",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"indicios",
+								"1"
+							]
+						},
+						"description": "Updates an existing 'indicio' (evidence item) by its ID. This endpoint expects a JSON body with the following required fields: 'descripcion' (description of the evidence), 'ubicacion' (location), and 'id_usuario_actualizacion' (ID of the user performing the update). All fields are mandatory."
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar indicio (borrado lógico)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id_usuario_actualizacion\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/expedientes/1",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"expedientes",
+								"1"
+							]
+						},
+						"description": "DELETE endpoint to logically (soft) delete an 'indicio' (evidence record) by its ID. Requires 'id_usuario_actualizacion' in the request body. Uses the '{{api_local}}' variable for the base URL. This operation marks the record as deleted without physically removing it from the database."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CATALOGOS",
+			"item": [
+				{
+					"name": "obtener departamentos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoyLCJ1c3VhcmlvIjoiZHBlcmV6Iiwicm9sZXMiOlsiQ09PUkRJTkFET1IiXSwiaWF0IjoxNzYzOTEyNzU1LCJleHAiOjE3NjM5NDE1NTV9.nWrTtRrIlFBpPrVJwH9jiZ0yVSYbOGCr9S5cGUpc7r0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{api_local}}/catalogs/departamentos",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"catalogs",
+								"departamentos"
+							]
+						},
+						"description": "Retrieves a list of all departments from the catalog. This GET request returns an array of department objects, each typically containing department identifiers and names. Use this endpoint to obtain the available departments for selection or reference in other operations. No request parameters or body are required. The response is usually in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "obtener municipios por departamento",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_local}}/catalogs/municipios?id_departamento=1",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"catalogs",
+								"municipios"
+							],
+							"query": [
+								{
+									"key": "id_departamento",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This GET request retrieves the list of municipalities associated with a specific department. \n\nRequired Query Parameter:\n- id_departamento (integer): The unique identifier of the department for which you want to obtain the municipalities.\n\nExpected Response:\n- Returns a list of municipalities corresponding to the provided department ID. Each municipality typically includes its ID, name, and other relevant details."
+					},
+					"response": []
+				},
+				{
+					"name": "obtener estados expediente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_local}}/catalogs/estados",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"catalogs",
+								"estados"
+							]
+						},
+						"description": "Retrieves the list of possible states for an expediente (case file). Use this endpoint to obtain all available status options for cataloging or filtering expedientes in the system. No parameters are required."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "EXPEDIENTE ESTADOS",
+			"item": [
+				{
+					"name": "crear expediente estado",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id_expediente\": 2,\r\n  \"id_estado_expediente\": 3,\r\n  \"id_coordinador_revision\": 5,\r\n  \"motivo_rechazo\": null,\r\n  \"id_usuario_registro\": 1,\r\n  \"estado_registro\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/expediente-estados",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"expediente-estados"
+							]
+						},
+						"description": "Creates a new expediente estado (case status) record. This POST endpoint is used to register a new status for an expediente (case) in the system.\n\nRequired parameters (in JSON body):\n- id_expediente (integer): The unique identifier of the expediente.\n- id_estado_expediente (integer): The status identifier to assign to the expediente.\n- id_coordinador_revision (integer): The ID of the coordinator responsible for the review.\n- motivo_rechazo (string or null): Reason for rejection, if applicable.\n- id_usuario_registro (integer): The ID of the user performing the registration.\n- estado_registro (integer): The state of the registration (e.g., active/inactive).\n\nExpected behavior:\n- On success, registers the new status for the expediente and returns confirmation.\n- Use this endpoint when you need to update or track the status of an expediente in the workflow."
+					},
+					"response": []
+				},
+				{
+					"name": "obtener expediente estados por expediente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_local}}/expediente-estados/por-expediente/2",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"expediente-estados",
+								"por-expediente",
+								"2"
+							]
+						},
+						"description": "Retrieves the list of states (estados) associated with a specific expediente (case file) by its ID. \n\n**Parameters:**\n- `expedienteId` (path parameter): The unique identifier of the expediente to fetch states for. In this request, the value is '2'.\n\n**Expected Response:**\nReturns a JSON array containing the states related to the specified expediente, including details such as state ID, name, and relevant timestamps. Use this endpoint to track the progress or status changes of a particular expediente."
+					},
+					"response": []
+				},
+				{
+					"name": "actualizar expediente estado",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id_estado_expediente\": 3,\r\n  \"id_coordinador_revision\": 6,\r\n  \"motivo_rechazo\": \"Correcciones solicitadas\",\r\n  \"id_usuario_actualizacion\": 2,\r\n  \"estado_registro\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/expediente-estados/1",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"expediente-estados",
+								"1"
+							]
+						},
+						"description": "This endpoint updates the status of an expediente (case file) by specifying its ID in the URL path. It is typically used by coordinators or system users to reflect changes in the expediente's review or approval process.\n\n**Request Body Parameters:**\n- `id_estado_expediente` (integer, required): The new status ID to assign to the expediente.\n- `id_coordinador_revision` (integer, required): The ID of the coordinator responsible for the review.\n- `motivo_rechazo` (string, required): The reason for rejection or requested corrections. Provide a clear explanation if the expediente is not approved.\n- `id_usuario_actualizacion` (integer, required): The user ID performing the update.\n- `estado_registro` (integer, required): The record status (e.g., 1 for active).\n\n**Usage Notes:**\n- Ensure all required fields are provided in the JSON body.\n- The endpoint expects a valid expediente ID in the URL path (e.g., `/expediente-estados/1`).\n- Use this endpoint to transition an expediente to a new state, such as approved, rejected, or under review.\n- Typical responses include success confirmation or error details if validation fails.\n\n**Example Request Body:**\n```json\n{\n  \"id_estado_expediente\": 3,\n  \"id_coordinador_revision\": 6,\n  \"motivo_rechazo\": \"Correcciones solicitadas\",\n  \"id_usuario_actualizacion\": 2,\n  \"estado_registro\": 1\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar expediente (borrado lógico) Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id_usuario_actualizacion\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/expediente-estados/1",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"expediente-estados",
+								"1"
+							]
+						},
+						"description": "This endpoint performs a logical (soft) delete of an expediente state. It requires the 'id_usuario_actualizacion' field in the request body to specify the user making the update. The base URL is set using the 'api_local' variable. Upon success, the expediente state is marked as deleted without being physically removed from the database."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "USUARIOS",
+			"item": [
+				{
+					"name": "crear usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"usuario\": \"sdperez\",\r\n  \"clave\": \"123456\",\r\n  \"nombres\": \"Juan\",\r\n  \"apellidos\": \"Doe\",\r\n  \"correo\": \"jdoe@example.com\",\r\n  \"numero_empleado\": \"E1234\",\r\n  \"id_usuario_registro\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/usuarios",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"usuarios"
+							]
+						},
+						"description": "Creates a new user in the system.\n\n**Purpose:**\nThis POST endpoint registers a new user with the provided details.\n\n**Required Fields (JSON body):**\n- `usuario` (string): Unique username for the user.\n- `clave` (string): Password for the user account.\n- `nombres` (string): User's first name(s).\n- `apellidos` (string): User's last name(s).\n- `correo` (string): User's email address.\n- `numero_empleado` (string): Employee number.\n- `id_usuario_registro` (integer): ID of the user performing the registration.\n\n**Expected Behavior:**\n- On success, returns details of the created user.\n- On failure, returns an error message indicating the issue (e.g., missing fields, duplicate username/email).\n\nSend a JSON payload with all required fields to create a user."
+					},
+					"response": []
+				},
+				{
+					"name": "obtener usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_local}}/usuarios/1",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"usuarios",
+								"1"
+							]
+						},
+						"description": "Retrieves the details of the user with ID 1. The base URL is set using the 'api_local' variable."
+					},
+					"response": []
+				},
+				{
+					"name": "actualizar usuario",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"clave\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/usuarios/1",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"usuarios",
+								"1"
+							]
+						},
+						"description": "Updates the user with ID 1. The request body must include the 'clave' field (password). Optional fields: 'nombres' (name) and 'correo' (email) can also be provided as per the schema."
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar usuario (borrado lógico)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id_usuario_actualizacion\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/usuarios/1",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"usuarios",
+								"1"
+							]
+						},
+						"description": "This DELETE endpoint performs a logical deletion of a user by their user ID. The 'id_usuario_actualizacion' field in the request body specifies the user responsible for the update. Use this endpoint to mark a user as deleted without physically removing their data from the system."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AUTENTICACION",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"usuario\": \"dperez\",\r\n  \"clave\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_local}}/auth/login",
+							"host": [
+								"{{api_local}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Este endpoint POST se utiliza para autenticar a un usuario. Debe enviarse un objeto JSON en el cuerpo de la solicitud con los siguientes campos:\n\n- \"usuario\": Nombre de usuario.\n- \"clave\": Contraseña del usuario.\n\nEjemplo de cuerpo de solicitud:\n{\n  \"usuario\": \"sdperez\",\n  \"clave\": \"123456\"\n}\n\nUtilice este endpoint para iniciar sesión y obtener acceso a los recursos protegidos del sistema."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "api_local",
+			"value": ""
+		}
+	]
+}

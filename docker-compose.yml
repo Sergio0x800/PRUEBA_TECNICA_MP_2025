@@ -1,0 +1,86 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    env_file:
+      - .env
+    environment:
+      - ACCEPT_EULA=${ACCEPT_EULA}
+      - SA_PASSWORD=${SA_PASSWORD}
+      - MSSQL_PID=${MSSQL_PID}
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+      - ./init:/init:ro
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$SA_PASSWORD" -Q "SELECT 1"
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  db-init:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: sqlserver-init
+    depends_on:
+      - sqlserver
+    env_file:
+      - .env
+    volumes:
+      - ./init:/init:ro
+    entrypoint:
+      - "/bin/bash"
+      - "-c"
+      - >
+        echo "Esperando a que SQL Server esté COMPLETAMENTE listo...";
+        for i in $(seq 1 60); do 
+          /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P "$SA_PASSWORD" -Q "SELECT name FROM sys.databases" >/dev/null 2>&1 && break;
+          echo "SQL aún no listo... esperando 2s ($$i/60)";
+          sleep 2;
+        done;
+        echo "SQL listo. Ejecutando init.sql...";
+        if [ -f /init/init.sql ]; then 
+          /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P "$SA_PASSWORD" -i /init/init.sql; 
+        fi;
+    restart: "no"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: dicri-backend
+    env_file:
+      - .env
+    environment:
+      - AMBIENTE=${AMBIENTE}
+      - PUERTO=${BACKEND_PORT}
+      - NOMBRE_SERVICIO=${NOMBRE_SERVICIO}
+      - DOMINIO=${DOMINIO}
+      - DB_USER=${MSSQL_USER}
+      - DB_HOST=sqlserver
+      - DB_PASSWORD=${MSSQL_PASSWORD}
+      - DB_NAME=${MSSQL_DATABASE}
+      - JWT_SECRET=${JWT_SECRET}
+    ports:
+      - "3000:3000"
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: "http://localhost:3000"
+    container_name: dicri-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  mssql-data:
+    driver: local
